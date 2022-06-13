@@ -30,7 +30,7 @@ function activate(context) {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri);
-            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen");
+            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen-t5");
             // on request last change
             let requestId = new Date().getTime();
             lastRequest = requestId;
@@ -63,8 +63,9 @@ function activate(context) {
                 // Add the generated code to the inline suggestion list
                 const items = new Array();
                 for (const text of rs.completions) {
+                    const insertText = text.replace(/\\n/g, '\n');
                     items.push({
-                        text,
+                        insertText,
                         range: new vscode.Range(position.translate(0, text.length), position),
                     });
                 }

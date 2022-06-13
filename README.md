@@ -5,5 +5,5 @@ vsce package
 ```
 
 ```
-/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron --enable-proposed-api qhduan.codegen
+code --enable-proposed-api lowinli.codegen
 ```

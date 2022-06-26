@@ -30,7 +30,7 @@ function activate(context) {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri);
-            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen-t5");
+            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen");
             // on request last change
             let requestId = new Date().getTime();
             lastRequest = requestId;

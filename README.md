@@ -27,5 +27,9 @@ code-insiders --enable-proposed-api lowinli.codegen # 本地未发布插件需�
 
 ![](pic/%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8.png)
 
++ 8.在线生成
+
+![](pic/效果.png)
+
 ---
 + 可以直接下载制作好的[vsce](https://github.com/LowinLi/code-clippy-vscode/releases/tag/v0.0.1)，跳过步骤1、步骤2

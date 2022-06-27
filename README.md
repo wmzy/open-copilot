@@ -20,9 +20,11 @@ code-insiders --enable-proposed-api lowinli.codegen # 本地未发布插件需�
 ```
 
 + 6.安装插件
+
 ![](pic/%E5%AE%89%E8%A3%85vsix.png)
 
 + 7.配置服务器地址
+
 ![](pic/%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8.png)
 
 ---

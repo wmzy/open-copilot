@@ -39,8 +39,14 @@
             "properties": {
                 "conf.resource.codegen": {
                     "type": "string",
-                    "default": "http://172.16.104.29:7104/api/codegen-t5",
+                    "default": "http://localhost:8000/generate_mono",
                     "description": "Model api address.",
+                    "scope": "resource"
+                },
+                "conf.resource.output_max_length": {
+                    "type": "string",
+                    "default": "18",
+                    "description": "generate output max length.",
                     "scope": "resource"
                 }
             }

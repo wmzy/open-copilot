@@ -7,12 +7,15 @@ export type FetchCodeCompletions = {
 // const API_URL = 'http://localhost:8000/api/codegen'
 const headers = { "Content-Type": "application/json" }
 
-export async function fetchCodeCompletionTexts(prompt: string, API_URL: string): Promise<FetchCodeCompletions> {
+export async function fetchCodeCompletionTexts(prompt: string, API_URL: string, OUTPUT_MAX_LENGTH: string): Promise<FetchCodeCompletions> {
     // Send post request to inference API
     const res = await fetch(API_URL, {
         method: "post",
         body: JSON.stringify({
-            "inputs": prompt
+            "inputs": prompt,
+            "parameters": {
+                "output_max_length": Number(OUTPUT_MAX_LENGTH)
+            }
         }),
         headers: headers
     })

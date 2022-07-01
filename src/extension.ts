@@ -30,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri)
             const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen")
+            const OUTPUT_MAX_LENGTH = configuration.get("conf.resource.output_max_length", "18")
 
             // on request last change
             let requestId = new Date().getTime()
@@ -55,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
 
                 try {
                     // Fetch the code completion based on the text in the user's document
-                    rs = await fetchCodeCompletionTexts(textBeforeCursor, API_KEY)
+                    rs = await fetchCodeCompletionTexts(textBeforeCursor, API_KEY, OUTPUT_MAX_LENGTH)
                 } catch (err) {
                     if (err instanceof Error) {
                         vscode.window.showErrorMessage(err.toString())

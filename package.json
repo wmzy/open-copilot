@@ -2,9 +2,9 @@
     "enabledApiProposals": [
         "inlineCompletions"
     ],
-    "name": "codegen",
+    "name": "codegen-inlineCompletions",
     "displayName": "Code Gen",
-    "description": "Your friendly neighborhood Clippy, ready to help you with all your code needs :D!",
+    "description": "codegen inline completions",
     "version": "0.0.1",
     "publisher": "lowinli",
     "icon": "code_clippy_logo.jpg",

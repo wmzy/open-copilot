@@ -1,7 +1,4 @@
 {
-    "enabledApiProposals": [
-        "inlineCompletions"
-    ],
     "name": "codegen-inlineCompletions",
     "displayName": "Code Gen",
     "description": "codegen inline completions",

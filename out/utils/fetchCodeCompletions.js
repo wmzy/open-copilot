@@ -13,13 +13,16 @@ exports.fetchCodeCompletionTexts = void 0;
 const node_fetch_1 = require("node-fetch");
 // const API_URL = 'http://localhost:8000/api/codegen'
 const headers = { "Content-Type": "application/json" };
-function fetchCodeCompletionTexts(prompt, API_URL) {
+function fetchCodeCompletionTexts(prompt, API_URL, OUTPUT_MAX_LENGTH) {
     return __awaiter(this, void 0, void 0, function* () {
         // Send post request to inference API
         const res = yield (0, node_fetch_1.default)(API_URL, {
             method: "post",
             body: JSON.stringify({
-                "inputs": prompt
+                "inputs": prompt,
+                "parameters": {
+                    "output_max_length": Number(OUTPUT_MAX_LENGTH)
+                }
             }),
             headers: headers
         });

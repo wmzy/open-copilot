@@ -1,50 +1,35 @@
 {
-    "name": "codegen-inlineCompletions",
-    "displayName": "Code Gen",
+    "name": "open-copilot",
+    "displayName": "Open Copilot",
     "description": "codegen inline completions",
     "version": "0.0.1",
-    "publisher": "lowinli",
-    "icon": "code_clippy_logo.jpg",
-    "repository": "https://github.com/LowinLi/code-clippy-vscode/",
+    "publisher": "wmzy",
+    "icon": "logo.jpg",
+    "repository": "https://github.com/wmzy/open-copilot",
     "engines": {
-        "vscode": "^1.34.0"
+        "vscode": "^1.73.1"
     },
     "license": "MIT",
     "categories": [
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:python"
+        "onStartupFinished"
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "commands": [
-            {
-                "command": "extension.codegen-settings",
-                "title": "Code Clippy Settings"
-            }
-        ],
-        "menus": {
-            "editor/inlineCompletions/actions": [
-                {
-                    "command": "extension.codegen-settings"
-                }
-            ]
-        },
         "configuration": {
-            "title": "Code Clippy Configuration",
+            "title": "Open Copilot Configuration",
             "properties": {
-                "conf.resource.codegen": {
+                "open-copilot.server": {
                     "type": "string",
-                    "default": "http://localhost:8000/generate_mono",
-                    "description": "Model api address.",
-                    "scope": "resource"
+                    "default": "http://localhost:7104/generate_multi",
+                    "description": "Model api address."
                 },
-                "conf.resource.output_max_length": {
+                "open-copilot.maxLines": {
                     "type": "string",
                     "default": "18",
-                    "description": "generate output max length.",
-                    "scope": "resource"
+                    "description": "generate output max lines."
                 }
             }
         }
@@ -53,23 +38,18 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "lint": "eslint . --ext .ts,.tsx",
-        "watch": "tsc -watch -p ./",
-        "download-api": "vscode-dts dev",
-        "postdownload-api": "vscode-dts main",
-        "postinstall": "npm run download-api"
+        "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
-        "@types/node": "^12.12.0",
-        "@types/node-fetch": "^2.5.10",
-        "@typescript-eslint/eslint-plugin": "^4.16.0",
-        "@typescript-eslint/parser": "^4.16.0",
-        "eslint": "^7.21.0",
-        "typescript": "^4.2.2",
-        "vscode-dts": "^0.3.1"
+        "@types/node": "^16.0.0",
+        "@types/node-fetch": "^2.6.2",
+        "@types/vscode": "^1.73.1",
+        "@typescript-eslint/eslint-plugin": "^5.45.1",
+        "@typescript-eslint/parser": "^5.45.1",
+        "eslint": "^8.29.0",
+        "typescript": "^4.9.4"
     },
     "dependencies": {
-        "@types/jsdom": "^16.2.12",
-        "jsdom": "^16.6.0",
-        "node-fetch": "^2.6.1"
+        "node-fetch": "^3.3.0"
     }
 }

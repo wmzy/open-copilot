@@ -1,88 +1,88 @@
-import * as vscode from 'vscode'
-import CSConfig from './config'
-import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions'
+import * as vscode from 'vscode';
+import { fetchCodeCompletionTexts } from './util';
 
 // QHD: some code refer to
 // https://github.com/kirillpanfile/ai-autocomplete/blob/cf2de2f4a32a0aee77d040364507eeef4349838c/src/extension.js
 
+const SEARCH_END = ['.', ',', '{', '(', ' ', '-', '_', '+', '-', '*', '=', '/', '?', '<', '>'];
 // Make an output channel for debug
-const print = vscode.window.createOutputChannel("codegen")
+const print = vscode.window.createOutputChannel('open-copilot');
 
 export function activate(context: vscode.ExtensionContext) {
-    const disposable = vscode.commands.registerCommand(
-        'extension.codegen-settings',
-        () => {
-            vscode.window.showInformationMessage('Show settings')
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  const provider: vscode.InlineCompletionItemProvider = {
+    provideInlineCompletionItems: async (
+      document,
+      position,
+      context,
+      token
+    ) => {
+      // Grab the api key from the extension's config
+      const configuration = vscode.workspace.getConfiguration('', document.uri);
+      const API_KEY = configuration.get(
+        'open-copilot.server',
+        'http://localhost:7104/generate_multi'
+      );
+      const OUTPUT_MAX_LENGTH = configuration.get(
+        'open-copilot.maxLines',
+        '18'
+      );
+
+
+      const textBeforeCursor = document.getText(
+        new vscode.Range(position.with(0, 0), position)
+      );
+      if (textBeforeCursor.trim() === '') {
+        return { items: [] };
+      }
+
+      const currLineBeforeCursor = document.getText(
+        new vscode.Range(position.with(undefined, 0), position)
+      );
+
+      // Check if user's state meets one of the trigger criteria
+      if (
+        SEARCH_END.includes(
+          textBeforeCursor[textBeforeCursor.length - 1]
+        ) ||
+        currLineBeforeCursor.trim() === ''
+      ) {
+        try {
+          // Fetch the code completion based on the text in the user's document
+          const completions = await fetchCodeCompletionTexts(
+            textBeforeCursor,
+            API_KEY,
+            OUTPUT_MAX_LENGTH,
+            token
+          );
+          // Add the generated code to the inline suggestion list
+          const items = completions.map(text => {
+            const insertText = text.replace(/\\n/g, '\n');
+            return ({
+              insertText,
+              range: new vscode.Range(
+                position.translate(0, text.length),
+                position
+              ),
+            }) as vscode.InlineCompletionItem;
+          });
+          print.appendLine(JSON.stringify(items));
+          return { items };
+        } catch (err) {
+          if (err instanceof Error) {
+            vscode.window.showErrorMessage(err.toString());
+          }
         }
-    )
+      }
+      return { items: [] };
+    },
+  };
 
-    context.subscriptions.push(disposable)
-
-
-    function sleep(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
-    let lastRequest = null
-
-    const provider: vscode.InlineCompletionItemProvider<vscode.InlineCompletionItem> = {
-        provideInlineCompletionItems: async (document, position, context, token) => {
-            // Grab the api key from the extension's config
-            const configuration = vscode.workspace.getConfiguration('', document.uri)
-            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen")
-            const OUTPUT_MAX_LENGTH = configuration.get("conf.resource.output_max_length", "18")
-
-            // on request last change
-            let requestId = new Date().getTime()
-            lastRequest = requestId
-            await sleep(1000)
-            if (lastRequest !== requestId) {
-                return { items: [] }
-            }
-
-            vscode.comments.createCommentController
-            const textBeforeCursor = document.getText()
-            if (textBeforeCursor.trim() === "") {
-                return { items: [] }
-            }
-
-            const currLineBeforeCursor = document.getText(
-                new vscode.Range(position.with(undefined, 0), position)
-            )
-
-            // Check if user's state meets one of the trigger criteria
-            if (CSConfig.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
-                let rs = null
-
-                try {
-                    // Fetch the code completion based on the text in the user's document
-                    rs = await fetchCodeCompletionTexts(textBeforeCursor, API_KEY, OUTPUT_MAX_LENGTH)
-                } catch (err) {
-                    if (err instanceof Error) {
-                        vscode.window.showErrorMessage(err.toString())
-                    }
-                    return { items: [] }
-                }
-
-                if (!rs) {
-                    return { items: [] }
-                }
-
-                // Add the generated code to the inline suggestion list
-                const items = new Array<vscode.InlineCompletionItem>()
-                for (const text of rs.completions) {
-                    const insertText = text.replace(/\\n/g, '\n');
-                    items.push({
-                        insertText,
-                        range: new vscode.Range(position.translate(0, text.length), position),
-                    })
-                }
-                print.appendLine(JSON.stringify(items))
-                return { items }
-            }
-            return { items: [] }
-        },
-    }
-
-    vscode.languages.registerInlineCompletionItemProvider({ pattern: "**" }, provider)
+  vscode.languages.registerInlineCompletionItemProvider(
+    { pattern: '**' },
+    provider
+  );
 }

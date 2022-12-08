@@ -20,13 +20,14 @@
 
 ## 自行制作
 
-+ 1.安装vsce，一个vscode插件打包工具
++ 1.打包vsce插件
 ```bash
-npm install -g vsce
+npx vsce package
 ```
-+ 2.打包vsce插件
++ 2.安装[code-insiders](https://code.visualstudio.com/insiders/)
+
 ```bash
-vsce package
+code --install-extension open-copilot-[version].vsix 
 ```
 
 + 3.安装[code-insiders](https://code.visualstudio.com/insiders/)
@@ -36,7 +37,7 @@ vsce package
 
 + 5.启动vscode
 ```bash
-code-insiders --enable-proposed-api lowinli.codegen-inlineCompletions # 本地未发布插件需要命令行授权
+code --enable-proposed-api wmzy.open-copilot # 本地未发布插件需要命令行授权
 ```
 
 + 6.安装插件
@@ -52,4 +53,4 @@ code-insiders --enable-proposed-api lowinli.codegen-inlineCompletions # 本地�
 ![](pic/效果.png)
 
 ---
-+ 可以直接下载制作好的[vsce](https://github.com/LowinLi/code-clippy-vscode/releases/tag/v0.0.1)，跳过步骤1、步骤2
++ 可以直接下载制作好的[vsce](https://github.com/wmzy/open-copilot/releases/tag/v0.0.1)，跳过步骤1、步骤2

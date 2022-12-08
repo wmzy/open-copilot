@@ -1,4 +1,0 @@
-#!/bin/bash
-
-vsce package
-

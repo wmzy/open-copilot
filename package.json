@@ -2,7 +2,7 @@
     "name": "open-copilot",
     "displayName": "Open Copilot",
     "description": "codegen inline completions",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "publisher": "wmzy",
     "icon": "logo.jpg",
     "repository": "https://github.com/wmzy/open-copilot",

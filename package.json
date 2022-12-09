@@ -35,6 +35,7 @@
         }
     },
     "scripts": {
+        "package": "npx vsce package",
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "lint": "eslint . --ext .ts,.tsx",
@@ -50,6 +51,6 @@
         "typescript": "^4.9.4"
     },
     "dependencies": {
-        "node-fetch": "^3.3.0"
+        "node-fetch": "^2.6.7"
     }
 }

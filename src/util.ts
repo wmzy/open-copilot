@@ -9,7 +9,12 @@ export type FetchCodeCompletions = {
 // const API_URL = 'http://localhost:8000/api/codegen'
 const headers = { "Content-Type": "application/json" };
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function fetchCodeCompletionTexts(prompt: string, API_URL: string, OUTPUT_MAX_LENGTH: string, token: CancellationToken): Promise<string[]> {
+    await sleep(300);
     const controller = new AbortController();
     token.onCancellationRequested(() => controller.abort());
     // Send post request to inference API

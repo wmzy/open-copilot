@@ -9,10 +9,6 @@ const SEARCH_END = ['.', ',', '{', '(', ' ', '-', '_', '+', '-', '*', '=', '/', 
 const print = vscode.window.createOutputChannel('open-copilot');
 
 export function activate(context: vscode.ExtensionContext) {
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const provider: vscode.InlineCompletionItemProvider = {
     provideInlineCompletionItems: async (
       document,
@@ -45,10 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Check if user's state meets one of the trigger criteria
       if (
-        SEARCH_END.includes(
+        currLineBeforeCursor.trim() === '' || SEARCH_END.includes(
           textBeforeCursor[textBeforeCursor.length - 1]
-        ) ||
-        currLineBeforeCursor.trim() === ''
+        )
       ) {
         try {
           // Fetch the code completion based on the text in the user's document
@@ -60,9 +55,15 @@ export function activate(context: vscode.ExtensionContext) {
           );
           // Add the generated code to the inline suggestion list
           const items = completions.map(text => {
-            const insertText = text.replace(/\\n/g, '\n');
+            let insertText = text.replace(/\\n/g, '\n');
+            // https://github.com/LowinLi/fastgpt/issues/3
+            if (!insertText.startsWith(textBeforeCursor)) {
+              if (insertText.includes("from'react")) {
+                insertText = insertText.replace("from'react", "from 'react");
+              }
+            }
             return ({
-              insertText,
+              insertText: insertText.replace(textBeforeCursor, ''),
               range: new vscode.Range(
                 position.translate(0, text.length),
                 position
@@ -73,7 +74,9 @@ export function activate(context: vscode.ExtensionContext) {
           return { items };
         } catch (err) {
           if (err instanceof Error) {
-            vscode.window.showErrorMessage(err.toString());
+            if (err.name !== 'AbortError') {
+              vscode.window.showErrorMessage(err.toString());
+            }
           }
         }
       }
